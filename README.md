@@ -21,7 +21,7 @@ SysTick register can only be accessed using word access.
    
         Clock source can be set using `CLKSOURCE` bit (2) of `CTRL` register.
 
-        0 - AHB/8
+        0 - AHB/8\
         1 - Processor Clock (AHB)
    2. Enable Tick interrupt-
 
