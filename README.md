@@ -6,15 +6,15 @@ Configure the systick timer to generate periodic interrupts. Use this timer for 
 
 ## SysTick Timer
 
-The processor has a 24 bit system timer, SysTick, that counts down from the reload value to zero, reloads and counts down on the subsequent clocks.
-System Tick Time (SysTick) generates interrupt requests on regular basis. This allows an os to perform context switching to support multitasking. For applications that do not require an OS, the SysTick can be used for time keeping, time measurement or as an interrupt source for tasks that need to be executed regularly.
+The processor has a 24 bit system timer, SysTick, that counts down from the reload value to zero, reloads and counts down on the subsequent clocks.\
+System Tick Time (SysTick) generates interrupt requests on regular basis. This allows an os to perform context switching to support multitasking. For applications that do not require an OS, the SysTick can be used for time keeping, time measurement or as an interrupt source for tasks that need to be executed regularly.\
 SysTick register can only be accessed using word access.
 
 ### Control flow
 
-1. Program the reload value:
+1. Program the reload value:\
    The reload value can be loaded by setting `LOAD` register. This value is set to 1 less that the number of clock cycles needed for the interrupt as the timer counts both reload value as well as zero. e.g. If the SysTick interrupt is required every 100 clock pulses, set RELOAD to 99.
-2. Clear current value:
+2. Clear current value:\
    This register can be accessed using `VAL` variable. Bits *24:31* are reserved and 24 bit value can be read from bits *23:0*. Writing any value this register sets it to zero along with setting `COUNT_FLAG` to zero.
 3. Configure SysTick and start:
    1. Select clock source-\
