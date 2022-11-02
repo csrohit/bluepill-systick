@@ -17,17 +17,13 @@ SysTick register can only be accessed using word access.
 2. Clear current value:
    This register can be accessed using `VAL` variable. Bits *24:31* are reserved and 24 bit value can be read from bits *23:0*. Writing any value this register sets it to zero along with setting `COUNT_FLAG` to zero.
 3. Configure SysTick and start:
-   1. Select clock source-
-   
-        Clock source can be set using `CLKSOURCE` bit (2) of `CTRL` register.
-
+   1. Select clock source-\
+        Clock source can be set using `CLKSOURCE` bit (2) of `CTRL` register.\
         0 - AHB/8\
         1 - Processor Clock (AHB)
-   2. Enable Tick interrupt-
-
+   2. Enable Tick interrupt-\
         To enable Tick interrupt set `TICKINT` bit (2) of `CTRL` register.
-   3. Start SysTick timer-
-
+   3. Start SysTick timer-\
         `ENABLE` bit (0) of `CTRL` register enables the counter. When `ENABLE` is set to 1, the counter loads the `RELOAD` value from the `LOAD` register and then counts down. On reaching 0, it sets the `COUNTFLAG` to 1 and optionally asserts the `SysTick` depending on the value of `TICKINT`. It then loads the `RELOAD` value again, and begins counting.
 
 ## Project Working
@@ -36,32 +32,28 @@ This project configures SysTick timer and uses it to generate time accurate dela
 
 ## Dependencies
 
-* **make**
-
+* **make**\
     Make utility is required for configuring and building this project. You can install make on linux by running command:
 
     ```bash
     sudo apt install build-essential
     ```
 
-* **gcc-arm-none-eabi toolchain**
-
+* **gcc-arm-none-eabi toolchain**\
     ARM cross-platform toolchain is required to build applications for arm mcus. Toolchain can be installed by running following command:
 
     ```bash
     sudo apt install gcc-arm-none-eabi
     ```
 
-* **openocd**
-
+* **openocd**\
     It is an Open On Circuit Debugging tool used to flash and debug arm micro controllers. You can install openocd on linux by running command:
 
    ```bash
    sudo apt install openocd -y
    ```
 
-* **Cortex Debug extension**
-
+* **Cortex Debug extension**\
     This extension for VSCode is helpful for debugging the application on Blue Pill. The contents of registers as well as memory are visible in the context menu.
     Launch VS Code Quick Open (Ctrl+P), paste the following command, and press enter.
 
