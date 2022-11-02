@@ -4,23 +4,41 @@
  * @author         : Rohit Nimkar <nehalnimkar@gmail.com> <https://csrohit.github.io>
  * @brief          : Main program body
  ******************************************************************************
+ * @attention
+ *
+ * This software component is licensed by Rohit Nimkar under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                        opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************
  */
 
 #include <stm32f1xx.h>
 
+volatile uint32_t msTicks = 0;
+
+/**
+ * @brief Interrupt handler function
+ * 
+ */
+void SysTick_Handler(void)
+{
+	msTicks++;
+}
+
 /**
  * @brief Add blocking delay
  *
- * @param ms number of milliseconds
+ * @param ms delay in milliseconds
  */
-void ms_delay(int ms)
+void delay(int ms)
 {
-    while (ms-- > 0)
-    {
-        volatile int x = 500;
-        while (x-- > 0)
-            __asm("nop");
-    }
+	uint32_t expected_ticks = msTicks + ms;
+	while (msTicks < expected_ticks)
+	{
+		__asm("nop");
+	}
 }
 
 /**
@@ -28,35 +46,44 @@ void ms_delay(int ms)
  * - Enable clock for GPIOC
  * - set pin13 as push pull output
  */
-void led_init(){
+void led_init()
+{
 	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
 	GPIOC->CRH = 0x02 << ((13 - 8) << 2);
 }
 
 /**
  * @brief Set GPIOC pin 13
- * 
+ *
  */
-void led_on(){
+void led_on()
+{
 	GPIOC->BSRR = 1 << 13;
 }
 
 /**
  * @brief Reset GPIOC pin 13
- * 
+ *
  */
-void led_off(){
+void led_off()
+{
 	GPIOC->BRR = 1 << 13;
 }
 
-
 int main(void)
 {
+	// Initialise systick timer
+	int ret = SysTick_Config(SystemCoreClock / 1000);
+	if (ret < 0)
+		while (1)
+			;
+
 	led_init();
-	while(1){
+	while (1)
+	{
 		led_on();
-		ms_delay(500);
+		delay(1000);
 		led_off();
-		ms_delay(500);
+		delay(1000);
 	}
 }
