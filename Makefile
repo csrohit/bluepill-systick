@@ -25,7 +25,7 @@ CFLAGS += -MMD -MP
 ASLAGS += -MMD -MP 
 
 SRC_DIR := src
-SRCS := $(shell find $(SRC_DIRS) -name '*.c')
+SRCS := $(shell find $(SRC_DIR) -name '*.c')
 OBJS := $(BUILD_DIR)/$(SRC_DIR)/startup_stm32f103c8tx.o $(SRCS:%.c=$(BUILD_DIR)/%.o) 
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJS) STM32F103C8TX_FLASH.ld
