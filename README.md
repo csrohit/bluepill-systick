@@ -16,7 +16,7 @@ SysTick register can only be accessed using word access.
 STM32F1 Blue pill is a versatile board and can be programmed in various ways. I have created following variations of this project which differs in programming language, use of RTOS and framework. Clone the repository and follow steps mentioned in the respective variations for building and flashing.
 
 1. [Baremetal](baremetal)
-2. libopencm3
+2. [libopencm3](opencm3)
 3. FreeRTOS
 4. Zephyr RTOS
 5. Arduino
