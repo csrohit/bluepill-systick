@@ -7,14 +7,12 @@
 
 
 
+/**
+ * @brief Initialize GPIOC port 
+ * Enable clock given to GPIOC port in order to use the port
+ */
 static void clock_setup(void)
 {
-    // First, let's ensure that our clock is running off the high-speed internal
-    // oscillator (HSI) at 48MHz.
-    rcc_clock_setup_in_hsi_out_48mhz();
-
-    // As we are using LED connected to pin13 on GPIO port C
-    // we need to enable peripheral clock in order to use it
     rcc_periph_clock_enable(RCC_GPIOC);
 }
 
@@ -25,11 +23,11 @@ static void clock_setup(void)
  */
 static void systick_setup(void)
 {
-    systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
-    STK_CVR = 0;
-    systick_set_reload(rcc_ahb_frequency / 1000 - 1);
-    systick_interrupt_enable();
-    systick_counter_enable(); 
+    systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);     // set clock source
+    STK_CVR = 0;                                        // reset current value register
+    systick_set_reload(rcc_ahb_frequency / 1000 - 1);   // set reload value register to generate tick every millisecond
+    systick_interrupt_enable();                         // enable tick interrupt
+    systick_counter_enable();                           // start systick counter/timer
 }
 
 /**
