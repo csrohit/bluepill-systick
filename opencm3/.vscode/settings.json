@@ -4,6 +4,11 @@
         "gpio.h": "c"
     },
     "git.ignoredRepositories": [
-        "${workspaceFolder}/libopencm3"
-    ]
+        "${workspaceFolder}/libopencm3",
+        "libopencm3",
+        "git@github.com:libopencm3/libopencm3.git"
+
+    ],
+    "git.detectSubmodules": false,
+    "git.ignoreSubmodules": true
 }
