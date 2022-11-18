@@ -1,5 +1,5 @@
 
-TARGET 			= systick
+TARGET 		= systick
 
 # Opencm3 library version
 OPENCM3_DIR = libopencm3
@@ -19,6 +19,7 @@ CXXSTD		:= c++17
 
 # Project specific configuration
 BUILD_DIR 	:= build
+BUILD_TYPE	?= Debug 		# Debug | Release
 SRC_DIR 	:= src
 INC_DIRS	= include $(OPENCM3_DIR)/include
 
