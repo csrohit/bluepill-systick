@@ -60,7 +60,7 @@ The SysTick register can only be accessed using word access.
         `STK_CSR_ENABLE` bit (0) of the `STK_CSR` register enables the counter. When `STK_CSR` is set to 1, the counter loads the `STK_RVR` value to the `STK_CVR` register and then counts down. On reaching 0, it sets the `STK_CSR_COUNTFLAG` to 1 and optionally asserts the `SysTick` depending on the value of `STK_CSR_TICKINT`. It then loads the `STK_RVR` value again and begins counting.\
         libopencm3 has provided the following API to enable SysTick timer.
 
-        ```CPPs
+        ```CPP
         systick_counter_enable();
         ```
 
