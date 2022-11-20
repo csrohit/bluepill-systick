@@ -24,7 +24,7 @@ static void clock_setup(void)
 static void systick_setup(void)
 {
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);     // set clock source
-    STK_CVR = 0;                                        // reset current value register
+    systick_clear();                                       // reset current value register
     systick_set_reload(rcc_ahb_frequency / 1000 - 1);   // set reload value register to generate tick every millisecond
     systick_interrupt_enable();                         // enable tick interrupt
     systick_counter_enable();                           // start systick counter/timer

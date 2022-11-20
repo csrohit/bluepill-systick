@@ -30,37 +30,75 @@ The SysTick register can only be accessed using word access.
    ```
 
 2. Clear current value:\
-   This register can be accessed using the `STK_CVR` (*Current Value Register*) variable. Bits *24:31* are reserved and 24-bit value can be read from bits *23:0*. Writing any value this register sets it to zero along with setting `STK_CSR_COUNTFLAG` to zero.
+   This register can be accessed using the `STK_CVR` (*Current Value Register*) variable. Bits *24:31* are reserved and 24-bit value can be read from bits *23:0*. Writing any value this register sets it to zero along with setting `STK_CSR_COUNTFLAG` to zero.\
+   The following API provided by libopencm3 achieves this tasks for the developer.
 
    ```CPP
-    STK_CVR = 0;
+    systick_clear();
    ```
 
 3. Configure SysTick and start:
    1. Select clock source-\
         Clock source can be set using the `STK_CSR_CLKSOURCE` (*Clock source*) bit (2) of the `STK_CSR` (*Control and Status Register*) register.\
         0 - AHB/8\
-        1 - Processor Clock (AHB)
+        1 - Processor Clock (AHB)\
+        libopencm3 has given us the following API for configuring the clock source for SysTick.
 
         ```CPP
         systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
         ```
 
    2. Enable Tick interrupt-\
-        To enable the Tick interrupt set the `STK_CSR_TICKINT` bit (2) of the `STK_CSR` register.
+        To enable the Tick interrupt set the `STK_CSR_TICKINT` bit (2) of the `STK_CSR` register.\ The following API is provided by libopencm3 for this task.
 
         ```CPP
         systick_interrupt_enable();
         ```
 
    3. Start SysTick timer-\
-        `STK_CSR_ENABLE` bit (0) of the `STK_CSR` register enables the counter. When `STK_CSR` is set to 1, the counter loads the `STK_RVR` value to the `STK_CVR` register and then counts down. On reaching 0, it sets the `STK_CSR_COUNTFLAG` to 1 and optionally asserts the `SysTick` depending on the value of `STK_CSR_TICKINT`. It then loads the `STK_RVR` value again and begins counting.
-        [link1](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L56)
-        [link2](src/main.cpp#L60)
+        SysTick timer can be started by calling the following API function.
+        `STK_CSR_ENABLE` bit (0) of the `STK_CSR` register enables the counter. When `STK_CSR` is set to 1, the counter loads the `STK_RVR` value to the `STK_CVR` register and then counts down. On reaching 0, it sets the `STK_CSR_COUNTFLAG` to 1 and optionally asserts the `SysTick` depending on the value of `STK_CSR_TICKINT`. It then loads the `STK_RVR` value again and begins counting.\
+        libopencm3 has provided the following API to enable SysTick timer.
 
         ```CPPs
         systick_counter_enable();
         ```
+
+## Source code description
+
+* `void rcc_periph_clock_enable(enum rcc_periph_clken clken)`: Enables the clock source for the peripherals.\
+To enable the clock source for GPIO Port C, pass `RCC_GPIOC` value to `clken` input paramter of the API.[Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/stm32/common/rcc_common_all.c#L134) to view function definition.
+
+* `void systick_set_clocksource(uint8_t clocksource)`: Sets the clock source for SysTick timer.\
+    The clock source can be either the AHB clock or the same clock divided by 8. The clock source is set to *AHB* by passing `STK_CSR_CLKSOURCE_AHB` to the `clocksource` value.
+    [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L122).
+
+* `void systick_clear(void)`: Clears SysTick current value register.\
+SysTick counter value is cleared and the counter flag is reset.[Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L187)to view function definition.
+
+* `systick_set_reload(uint32_t value)`: Sets the automatic reload value for SysTick timer.\
+The counter is set to the reload value when the counter starts and after it reaches zero. The SysTick counter value might be undefined upon the startup. To get the predictable behavior, it is a good idea to set or clear the counter after set reload. To set the timer to tick every millisecond, `rcc_ahb_frequency / 1000 - 1` value should be passed to the API. [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L56) to view function definition.
+
+* `systick_interrupt_enable(void)`: Enables SysTick interrupt.\
+ [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L132) to view function definition.
+
+* `void systick_counter_enable(void)`: Enables SysTick counter.\
+ [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L152) to view function definition.
+
+* `gpio_set_mode(uint32_t gpioport, uint8_t mode, uint8_t cnf, uint16_t gpios)`: Set GPIO poin mode.\
+Sets the mode (input/output) and configuration (analog/digital and open drain/push pull), for a set of GPIO pins on a GPIO port. In the code `gpioport` is `GPIOC`, `mode` is `GPIO_MODE_OUTPUT_2_MHZ` for setting the pin as output with speed as 2MHz, `cnf` as `GPIO_CNF_OUTPUT_PUSHPULL` for setting it as output in push-pull mode for `pin` `GPIO13` .\
+ [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/stm32/f1/gpio.c#L93) to view function definition.
+
+* `gpio_toggle(uint32_t gpioport, uint16_t gpios)`: Toggle a group of Pins.\
+ The toggling is not atomic but but non-toggled pins are not affected. To toggle Pin13 of GPIO Port C, pass `GPIOC` as `gpioport` and `GPIO13` as `gpios`. [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/stm32/common/gpio_common_all.c#L87) to view function definition.
+
+* `sys_tick_handler(void)`: Interrupt service routine for SysTick handler.\
+ Increments the `ticks` variable.\
+  [Click here](src/main.cpp#L44) to view function definition.
+
+* `delay(uint32_t ms)`: Generates blocking delay.
+    Executes `_NOP` instructions till `ms` milliseconds are over.\
+    [Click here](src/main.cpp#L52) to view function definition.
 
 ## Project Working
 
