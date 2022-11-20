@@ -66,37 +66,37 @@ The SysTick register can only be accessed using word access.
 
 ## Source code description
 
-* `void rcc_periph_clock_enable(enum rcc_periph_clken clken)`: Enables the clock source for the peripherals.\
+* *void rcc_periph_clock_enable(enum rcc_periph_clken clken)*: Enables the clock source for the peripherals.\
 To enable the clock source for GPIO Port C, pass `RCC_GPIOC` value to `clken` input paramter of the API.[Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/stm32/common/rcc_common_all.c#L134) to view function definition.
 
-* `void systick_set_clocksource(uint8_t clocksource)`: Sets the clock source for SysTick timer.\
+* *void systick_set_clocksource(uint8_t clocksource)*: Sets the clock source for SysTick timer.\
     The clock source can be either the AHB clock or the same clock divided by 8. The clock source is set to *AHB* by passing `STK_CSR_CLKSOURCE_AHB` to the `clocksource` value.
     [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L122).
 
-* `void systick_clear(void)`: Clears SysTick current value register.\
+* *void systick_clear(void)*: Clears SysTick current value register.\
 SysTick counter value is cleared and the counter flag is reset.[Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L187)to view function definition.
 
-* `systick_set_reload(uint32_t value)`: Sets the automatic reload value for SysTick timer.\
+* *systick_set_reload(uint32_t value)*: Sets the automatic reload value for SysTick timer.\
 The counter is set to the reload value when the counter starts and after it reaches zero. The SysTick counter value might be undefined upon the startup. To get the predictable behavior, it is a good idea to set or clear the counter after set reload. To set the timer to tick every millisecond, `rcc_ahb_frequency / 1000 - 1` value should be passed to the API. [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L56) to view function definition.
 
-* `systick_interrupt_enable(void)`: Enables SysTick interrupt.\
+* *systick_interrupt_enable(void)*: Enables SysTick interrupt.\
  [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L132) to view function definition.
 
-* `void systick_counter_enable(void)`: Enables SysTick counter.\
+* *void systick_counter_enable(void)*: Enables SysTick counter.\
  [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L152) to view function definition.
 
-* `gpio_set_mode(uint32_t gpioport, uint8_t mode, uint8_t cnf, uint16_t gpios)`: Set GPIO poin mode.\
+* *gpio_set_mode(uint32_t gpioport, uint8_t mode, uint8_t cnf, uint16_t gpios)*: Set GPIO poin mode.\
 Sets the mode (input/output) and configuration (analog/digital and open drain/push pull), for a set of GPIO pins on a GPIO port. In the code `gpioport` is `GPIOC`, `mode` is `GPIO_MODE_OUTPUT_2_MHZ` for setting the pin as output with speed as 2MHz, `cnf` as `GPIO_CNF_OUTPUT_PUSHPULL` for setting it as output in push-pull mode for `pin` `GPIO13` .\
  [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/stm32/f1/gpio.c#L93) to view function definition.
 
-* `gpio_toggle(uint32_t gpioport, uint16_t gpios)`: Toggle a group of Pins.\
+* *gpio_toggle(uint32_t gpioport, uint16_t gpios)*: Toggle a group of Pins.\
  The toggling is not atomic but but non-toggled pins are not affected. To toggle Pin13 of GPIO Port C, pass `GPIOC` as `gpioport` and `GPIO13` as `gpios`. [Click here](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/stm32/common/gpio_common_all.c#L87) to view function definition.
 
-* `sys_tick_handler(void)`: Interrupt service routine for SysTick handler.\
+* *sys_tick_handler(void)*: Interrupt service routine for SysTick handler.\
  Increments the `ticks` variable.\
   [Click here](src/main.cpp#L44) to view function definition.
 
-* `delay(uint32_t ms)`: Generates blocking delay.
+* *delay(uint32_t ms)*: Generates blocking delay.
     Executes `_NOP` instructions till `ms` milliseconds are over.\
     [Click here](src/main.cpp#L52) to view function definition.
 
