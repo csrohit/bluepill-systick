@@ -21,18 +21,46 @@ The SysTick register can only be accessed using word access.
 ![Control flow diagram for SysTick timer](../docs/filled.png "SysTick timer - control flow diagram")
 
 1. Program the reload value:\
-   The reload value can be loaded by setting the `STK_RVR` (*Reload Value Register*) register. This value is set to 1 less than the number of clock cycles needed for the interrupt as the timer counts both reload value as well as zero. e.g. If the SysTick interrupt is required every 100 clock pulses, set RELOAD to 99.
+   The reload value can be loaded by setting the `STK_RVR` (*Reload Value Register*) register. This value is set to 1 less than the number of clock cycles needed for the interrupt as the timer counts both reload value as well as zero. e.g. If the SysTick interrupt is required every 100 clock pulses, set `STK_CVR` to 99.\
+
+   The following snippet consfigures SysTick for 1 ms interrupt.
+
+   ```CPP
+    systick_set_reload(rcc_ahb_frequency / 1000 - 1);
+   ```
+
 2. Clear current value:\
    This register can be accessed using the `STK_CVR` (*Current Value Register*) variable. Bits *24:31* are reserved and 24-bit value can be read from bits *23:0*. Writing any value this register sets it to zero along with setting `STK_CSR_COUNTFLAG` to zero.
+
+   ```CPP
+    STK_CVR = 0;
+   ```
+
 3. Configure SysTick and start:
    1. Select clock source-\
         Clock source can be set using the `STK_CSR_CLKSOURCE` (*Clock source*) bit (2) of the `STK_CSR` (*Control and Status Register*) register.\
         0 - AHB/8\
         1 - Processor Clock (AHB)
+
+        ```CPP
+        systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+        ```
+
    2. Enable Tick interrupt-\
         To enable the Tick interrupt set the `STK_CSR_TICKINT` bit (2) of the `STK_CSR` register.
+
+        ```CPP
+        systick_interrupt_enable();
+        ```
+
    3. Start SysTick timer-\
         `STK_CSR_ENABLE` bit (0) of the `STK_CSR` register enables the counter. When `STK_CSR` is set to 1, the counter loads the `STK_RVR` value to the `STK_CVR` register and then counts down. On reaching 0, it sets the `STK_CSR_COUNTFLAG` to 1 and optionally asserts the `SysTick` depending on the value of `STK_CSR_TICKINT`. It then loads the `STK_RVR` value again and begins counting.
+        [link1](https://github.com/libopencm3/libopencm3/blob/7c09d0d14c99d5be56436a3864038212812bcd2a/lib/cm3/systick.c#L56)
+        [link2](src/main.cpp#L60)
+
+        ```CPPs
+        systick_counter_enable();
+        ```
 
 ## Project Working
 
@@ -105,9 +133,7 @@ Running the project is super easy. Just clone, build and flash.
     cd bluepill-systick/opencm3
     git submodule update --init
     ```
-00110011
-11001100
-01110111
+
 2. Using ssh
 
     ```bash
