@@ -21,7 +21,7 @@ The SysTick register can only be accessed using word access.
 ![Control flow diagram for SysTick timer](../docs/filled.png "SysTick timer - control flow diagram")
 
 1. Program the reload value:\
-   The reload value can be loaded by setting the `STK_RVR` (*Reload Value Register*) register. This value is set to 1 less than the number of clock cycles needed for the interrupt as the timer counts both reload value as well as zero. e.g. If the SysTick interrupt is required every 100 clock pulses, set `STK_CVR` to 99.\
+   The reload value can be loaded by setting the `STK_RVR` (*Reload Value Register*) register. This value is set to 1 less than the number of clock cycles needed for the interrupt as the timer counts both reload value as well as zero. e.g. If the SysTick interrupt is required every 100 clock pulses, set `STK_CVR` to 99.
 
    The following snippet consfigures SysTick for 1 ms interrupt.
 
@@ -37,8 +37,7 @@ The SysTick register can only be accessed using word access.
     systick_clear();
    ```
 
-3. Configure SysTick and start:
-   1. Select clock source-\
+3. Select clock source-\
         Clock source can be set using the `STK_CSR_CLKSOURCE` (*Clock source*) bit (2) of the `STK_CSR` (*Control and Status Register*) register.\
         0 - AHB/8\
         1 - Processor Clock (AHB)\
@@ -48,14 +47,14 @@ The SysTick register can only be accessed using word access.
         systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
         ```
 
-   2. Enable Tick interrupt-\
+   4. Enable Tick interrupt-\
         To enable the Tick interrupt set the `STK_CSR_TICKINT` bit (2) of the `STK_CSR` register.\ The following API is provided by libopencm3 for this task.
 
         ```CPP
         systick_interrupt_enable();
         ```
 
-   3. Start SysTick timer-\
+   5. Start SysTick timer-\
         SysTick timer can be started by calling the following API function.
         `STK_CSR_ENABLE` bit (0) of the `STK_CSR` register enables the counter. When `STK_CSR` is set to 1, the counter loads the `STK_RVR` value to the `STK_CVR` register and then counts down. On reaching 0, it sets the `STK_CSR_COUNTFLAG` to 1 and optionally asserts the `SysTick` depending on the value of `STK_CSR_TICKINT`. It then loads the `STK_RVR` value again and begins counting.\
         libopencm3 has provided the following API to enable SysTick timer.
@@ -94,7 +93,7 @@ Sets the mode (input/output) and configuration (analog/digital and open drain/pu
 
 ## Project Working
 
-This project configures the SysTick timer and uses it to generate a time-accurate delay for blinking an LED. The onboard LED connected to pin C13 blinks every second.
+This project configures the SysTick timer and uses it to generate a time-accurate delay for blinking an LED. The onboard LED connected to pin C13 blinks every 500ms.
 
 ## Dependencies
 
@@ -214,7 +213,7 @@ make flash
 
 ## Output
 
-The Onboard led connected to Pin C13 can be observed to be blinking every second.
+The Onboard led connected to Pin C13 can be observed to be blinking every 500ms.
 
 ## Debug
 

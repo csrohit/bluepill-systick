@@ -7,7 +7,6 @@ extern "C"
 {
 #endif
     void sys_tick_handler(void);
-    static void clock_setup(void);
     static void systick_setup(void);
     void delay(uint32_t duration);
     static void gpio_setup(void);
