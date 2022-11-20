@@ -1,12 +1,13 @@
 # STM32 Programming with libopencm3
 
-![Build Passing](https://img.shields.io/badge/build-passing-brightgreen) [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+![Build Passing](https://img.shields.io/badge/build-passing-brightgreen) [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)\
 Blinking an led on an STM32F1 Blue pill micro-controller with [libopencm3](https://github.com/libopencm3/libopencm3) is simpler than any alternative for professional developers.
 The *Hello World* of embedded world, blinking led is super easy to implement by using a SysTick timer as a time base. The project is implemented using a library called libopencm3. In this medium blog post: [Programming STM32 Blue Pill using libopencm3](https://medium.com/@csrohit/stm32-blue-pill-using-libopencm3-882165a0d79f/), you will get to know about libopencm3 and how to use in our projects.
 
 ## libopencm3
 
 The libopencm3 project aims to create an open-source firmware library for various ARM Cortex-M microcontrollers. The library supports most subsystems on *STM32F1* and other MCU series. It uses `gcc-arm-none-eabi` as the toolchain and `make` as the build system. Project-specific steps related to configuration and building are given in the sections below.\
+
 To read more about the library visit [libopencm3 on GitHub](https://github.com/libopencm3/libopencm3).
 
 ## SysTick Timer
@@ -72,7 +73,7 @@ This project configures the SysTick timer and uses it to generate a time-accurat
     After cloning this repository, clone the libopencm3 submodule and build for the required microcontrollers.
 
    ```bash
-   git submodules update --init
+   git submodule update --init
    pushd libopencm3
    make TARGETS="stm32/f1"
    popd
@@ -102,15 +103,17 @@ Running the project is super easy. Just clone, build and flash.
     ```bash
     git clone https://github.com/csrohit/bluepill-systick.git
     cd bluepill-systick/opencm3
-    git submodules update --init
+    git submodule update --init
     ```
-
+00110011
+11001100
+01110111
 2. Using ssh
 
     ```bash
     git clone git@github.com:csrohit/bluepill-systick.git
     cd bluepill-systick/opencm3
-    git submodules update --init
+    git submodule update --init
     ```
 
 ## Configuration
