@@ -17,7 +17,7 @@ STM32F1 Blue pill is a versatile board and can be programmed in various ways. I 
 
 1. [Baremetal](baremetal)
 2. [libopencm3](opencm3)
-3. FreeRTOS
+3. [FreeRTOS](rtos)
 4. Zephyr RTOS
 5. Arduino
 6. CPP Cmake
